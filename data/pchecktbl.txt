@@ -1,0 +1,7 @@
+PUSHV 10000500002
+PUSHL "AB"       
+EQ___            
+PUSHV 10000300003
+PUSHL "34A"      
+EQ___            
+AND__            
