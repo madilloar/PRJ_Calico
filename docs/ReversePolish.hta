@@ -4,9 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-31j">
 <title>中置記法を後置記法に変換する</title>
 <script language="JavaScript">
-var workStack_ = null;
-var reversPolish_ = null;
-var priorities_ = {
+  var workStack_ = null;
+  var reversPolish_ = null;
+  var priorities_ = {
     "OPERAND" : 0,
     "*" : 1,
     "/" : 1,
@@ -14,7 +14,7 @@ var priorities_ = {
     "+" : 2,
     "-" : 2,
     "<" : 3,  // LT
-    ">" : 3,  // GT
+    ">" : 3, // GT
     "<=" : 3, // LE
     ">=" : 3, // GE
     "==" : 3, // EQ
@@ -48,7 +48,7 @@ var priorities_ = {
     return null;
   };
   Stack.prototype.peek = function() {
-    return this.__a[this.__a.length-1];
+    return this.__a[this.__a.length - 1];
   };
   Stack.prototype.size = function() {
     return this.__a.length;
@@ -60,7 +60,7 @@ var priorities_ = {
   function evaluate(expression) {
     var st = expression.split(" ");
 
-    for ( var i = 0; i < st.length; i++) {
+    for (var i = 0; i < st.length; i++) {
       var token = st[i];
       // 例外1:トークン"("が来たら、無条件にStackにPUSH。
       if (token == "(") {
@@ -94,59 +94,53 @@ var priorities_ = {
   }
 
   function evaluateOperatorOperand(token) {
-      while (workStack_.size() > 0) {
-          var top = workStack_.peek();
-          if (getPriority(token) < getPriority(top)) {
-              break;
-          } else {
-              reversPolish_.push(workStack_.pop());
-          }
+    while (workStack_.size() > 0) {
+      var top = workStack_.peek();
+      if (getPriority(token) < getPriority(top)) {
+        break;
+      } else {
+        reversPolish_.push(workStack_.pop());
       }
-      workStack_.push(token);
+    }
+    workStack_.push(token);
   }
   function getPriority(token) {
-      var p = priorities_[token];
-      if (undefined == p) {
-          return priorities_["OPERAND"];
-      }
-      return p;
+    var p = priorities_[token];
+    if (undefined == p) {
+      return priorities_["OPERAND"];
+    }
+    return p;
   }
-  function clickStart(){
+  function clickStart() {
     workStack_ = new Stack();
     reversPolish_ = new Stack();
     var val = document.form01.TXT_EXPRESSION.value;
     evaluate(val);
-    document.getElementById("ID_VCODE").innerText =reversPolish_.toString();
+    document.getElementById("ID_VCODE").innerText = reversPolish_.toString();
   }
-  
 </script>
 </head>
 <body>
-<form name="form01">
-<table>
-	<tr>
-		<td>中置記法(E):</td>
-		<td><input name="TXT_EXPRESSION" type="text" accesskey="e"
-			size="64" value="" title="式を入力してください。" /></td>
-	</tr>
-	<tr>
-		<td>後置記法(F):</td>
-		<td><span id="ID_VCODE" /></td>
-	</tr>
-	<tr>
-		<td colspan="2" align="right"><input type="button" accesskey="a"
-			value="スタート(A)" onClick="clickStart();" /></td>
-	</tr>
+  <form name="form01">
+    <table>
+      <tr>
+        <td>中置記法(E):</td>
+        <td><input name="TXT_EXPRESSION" type="text" accesskey="e" size="64" value="" title="式を入力してください。" /></td>
+      </tr>
+      <tr>
+        <td>後置記法(F):</td>
+        <td><span id="ID_VCODE" /></td>
+      </tr>
+      <tr>
+        <td colspan="2" align="right"><input type="button" accesskey="a" value="スタート(A)" onClick="clickStart();" /></td>
+      </tr>
 
-</table>
+    </table>
 
-<hr/>
+    <hr />
 
-使い方：<br>
-各トークンはスペース区切りで入力すること。<br>
-使えるオペレータの一覧。演算子の優先順位の高いものから並べている。<br>
-単項演算子は右結合。2項演算子は左結合。<br>
-<pre>
+    使い方：<br> 各トークンはスペース区切りで入力すること。<br> 使えるオペレータの一覧。演算子の優先順位の高いものから並べている。<br> 単項演算子は右結合。2項演算子は左結合。<br>
+    <pre>
 例)
 中置記法：NOT ( A AND B )
 後置記法：[A,B,AND,NOT]
@@ -176,7 +170,7 @@ var priorities_ = {
     ")" : 99
 </code>
 </pre>
-<hr/>
-</form>
+    <hr />
+  </form>
 </body>
 </html>
