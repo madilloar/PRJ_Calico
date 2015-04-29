@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-31j">
+<title>中置記法を後置記法に変換する</title>
+<script language="JavaScript">
+var workStack_ = null;
+var reversPolish_ = null;
+var priorities_ = {
+    "OPERAND" : 0,
+    "*" : 1,
+    "/" : 1,
+    "%" : 1,
+    "+" : 2,
+    "-" : 2,
+    "<" : 3,  // LT
+    ">" : 3,  // GT
+    "<=" : 3, // LE
+    ">=" : 3, // GE
+    "==" : 3, // EQ
+    "!=" : 3, // NOTEQ
+    "IS_SPACE" : 4,
+    "IS_NOT_SPACE" : 4,
+    "LIKE" : 4,
+    "NOT_BETWEEN" : 4,
+    "BETWEEN" : 4,
+    "IN" : 4,
+    "NOT_IN" : 4,
+    "NOT" : 5,
+    "AND" : 6,
+    "OR" : 7,
+    "(" : 99,
+    ")" : 99
+  };
+  /**
+   * Stack (LIFO)
+   */
+  function Stack() {
+    this.__a = new Array();
+  }
+  Stack.prototype.push = function(o) {
+    this.__a.push(o);
+  };
+  Stack.prototype.pop = function() {
+    if (this.__a.length > 0) {
+      return this.__a.pop();
+    }
+    return null;
+  };
+  Stack.prototype.peek = function() {
+    return this.__a[this.__a.length-1];
+  };
+  Stack.prototype.size = function() {
+    return this.__a.length;
+  };
+  Stack.prototype.toString = function() {
+    return '[' + this.__a.join(',') + ']';
+  };
+
+  function evaluate(expression) {
+    var st = expression.split(" ");
+
+    for ( var i = 0; i < st.length; i++) {
+      var token = st[i];
+      // 例外1:トークン"("が来たら、無条件にStackにPUSH。
+      if (token == "(") {
+        workStack_.push(token);
+        // 次のトークンを読みに行く。
+        continue;
+      }
+      // 例外2:トークン")"が来たら、StackのトップをPEEKし、"("が出てくるまで、Stack
+      // をPOPして、後置記法ListにADD。
+      if (token == ")") {
+        while (workStack_.size() > 0) {
+          var top = workStack_.peek();
+          if (top == "(") {
+            break;
+          } else {
+            reversPolish_.push(workStack_.pop());
+          }
+        }
+        // Stackのトップに"("があるはずなので、邪魔なので取り除く。
+        workStack_.pop();
+        // 次のトークンを読みに行く。
+        continue;
+      }
+      // 1).通常の演算子と被演算数の処理
+      evaluateOperatorOperand(token);
+    }
+    // 最後に残ったStackをPOPして、後置記法ListにADD。
+    while (workStack_.size() > 0) {
+      reversPolish_.push(workStack_.pop());
+    }
+  }
+
+  function evaluateOperatorOperand(token) {
+      while (workStack_.size() > 0) {
+          var top = workStack_.peek();
+          if (getPriority(token) < getPriority(top)) {
+              break;
+          } else {
+              reversPolish_.push(workStack_.pop());
+          }
+      }
+      workStack_.push(token);
+  }
+  function getPriority(token) {
+      var p = priorities_[token];
+      if (undefined == p) {
+          return priorities_["OPERAND"];
+      }
+      return p;
+  }
+  function clickStart(){
+    workStack_ = new Stack();
+    reversPolish_ = new Stack();
+    var val = document.form01.TXT_EXPRESSION.value;
+    evaluate(val);
+    document.getElementById("ID_VCODE").innerText =reversPolish_.toString();
+  }
+  
+</script>
+</head>
+<body>
+<form name="form01">
+<table>
+	<tr>
+		<td>中置記法(E):</td>
+		<td><input name="TXT_EXPRESSION" type="text" accesskey="e"
+			size="64" value="" title="式を入力してください。" /></td>
+	</tr>
+	<tr>
+		<td>後置記法(F):</td>
+		<td><span id="ID_VCODE" /></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="right"><input type="button" accesskey="a"
+			value="スタート(A)" onClick="clickStart();" /></td>
+	</tr>
+
+</table>
+
+<hr/>
+
+使い方：<br>
+各トークンはスペース区切りで入力すること。<br>
+使えるオペレータの一覧。演算子の優先順位の高いものから並べている。<br>
+単項演算子は右結合。2項演算子は左結合。<br>
+<pre>
+例)
+中置記法：NOT ( A AND B )
+後置記法：[A,B,AND,NOT]
+<code>
+    "*" : 1,
+    "/" : 1,
+    "%" : 1,
+    "+" : 2,
+    "-" : 2,
+    "<" : 3,  // LT
+    ">" : 3,  // GT
+    "<=" : 3, // LE
+    ">=" : 3, // GE
+    "==" : 3, // EQ
+    "!=" : 3, // NOTEQ
+    "IS_SPACE" : 4,
+    "IS_NOT_SPACE" : 4,
+    "LIKE" : 4,
+    "NOT_BETWEEN" : 4,
+    "BETWEEN" : 4,
+    "IN" : 4,
+    "NOT_IN" : 4,
+    "NOT" : 5,
+    "AND" : 6,
+    "OR" : 7,
+    "(" : 99,
+    ")" : 99
+</code>
+</pre>
+<hr/>
+</form>
+</body>
+</html>
