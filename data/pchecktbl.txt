@@ -2,6 +2,22 @@ PUSHV 10000500002
 PUSHL "AB"       
 EQ___            
 PUSHV 10000300003
-PUSHL "34A"      
+PUSHL "3*5"      
+LIKE_            
+OR___            
+JPZ__ 00012      
+PUSHL "<true>"   
+PUSHL "<true>"   
+PUT__ 00001      
+PUSHV 10000500002
+PUSHL "AB"       
 EQ___            
-AND__            
+PUSHV 10000300003
+PUSHL "3*5"      
+LIKE_            
+OR___            
+JPZ__ 00023      
+PUSHL "<TRUE>"   
+PUSHL "<TURE>"   
+PUT__ 00018      
+END__
