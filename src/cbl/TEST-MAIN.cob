@@ -12,7 +12,7 @@
 000139 FILE-CONTROL.
 000140   SELECT FVCODE ASSIGN TO "FVCODE"
 000141   ORGANIZATION IS LINE SEQUENTIAL
-000142   STATUS FCODE-FST.
+000142   STATUS FVCODE-FST.
 000148*--------------------------------------------------------------
 000143 DATA DIVISION.
 000144 FILE                       SECTION.
@@ -25,7 +25,7 @@
 000148*--------------------------------------------------------------
 000158*- その他ワーク
 000168*--------------------------------------------------------------
-000178 01  FCODE-FST              PIC X(02).
+000178 01  FVCODE-FST              PIC X(02).
 000186*--------------------------------------------------------------
 000187*- 仮想コードモジュールCALLパラーメータ。
 000188*--------------------------------------------------------------
@@ -66,8 +66,8 @@
 000249                         OUT00.
 000250*- FILE READ
 000559   OPEN  INPUT  FVCODE.
-      *-  DISPLAY 'FCODE-FST:' FCODE-FST.
-000560   PERFORM UNTIL FCODE-FST NOT = '00'
+      *-  DISPLAY 'FVCODE-FST:' FVCODE-FST.
+000560   PERFORM UNTIL FVCODE-FST NOT = '00'
 000561     READ FVCODE
 000562       END
 000563         CONTINUE
