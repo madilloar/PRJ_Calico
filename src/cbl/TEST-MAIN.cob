@@ -1,20 +1,31 @@
 000020 IDENTIFICATION DIVISION.
 000030 PROGRAM-ID.   TEST-MAIN.
+000148*--------------------------------------------------------------
 000040 ENVIRONMENT    DIVISION.
 000138 INPUT-OUTPUT               SECTION.
+000148*--------------------------------------------------------------
+000158*- IN :仮想マシンコードが記述されたファイル
+000158*- ASSIGN TO "DD名"
+000158*- プログラム実行時の環境変数に"DD_DD名"を定義しておくと、
+000158*- その環境変数で指定されたファイルパスを見に行く。
+000168*--------------------------------------------------------------
 000139 FILE-CONTROL.
-000140   SELECT F1INPUT ASSIGN TO
-000141   '../data/pchecktbl.txt'
-000142   STATUS FST.
+000140   SELECT FVCODE ASSIGN TO "FVCODE"
+000141   ORGANIZATION IS LINE SEQUENTIAL
+000142   STATUS FCODE-FST.
+000148*--------------------------------------------------------------
 000143 DATA DIVISION.
 000144 FILE                       SECTION.
-000145 FD  F1INPUT.
-000146 01  F1RECORD               PIC X(18).
+000148*--------------------------------------------------------------
+000158*- 仮想マシンコードが記述されたファイル
+000168*--------------------------------------------------------------
+000145 FD  FVCODE.
+000146 01  FVCODE-REC             PIC X(18).
 000147 WORKING-STORAGE SECTION.
 000148*--------------------------------------------------------------
 000158*- その他ワーク
 000168*--------------------------------------------------------------
-000178 01  FST                    PIC X(02).
+000178 01  FCODE-FST              PIC X(02).
 000186*--------------------------------------------------------------
 000187*- 仮想コードモジュールCALLパラーメータ。
 000188*--------------------------------------------------------------
@@ -54,15 +65,16 @@
 000248                         IN300
 000249                         OUT00.
 000250*- FILE READ
-000559   OPEN  INPUT  F1INPUT.
-000560   PERFORM UNTIL FST NOT = '00'
-000561     READ F1INPUT
+000559   OPEN  INPUT  FVCODE.
+      *-  DISPLAY 'FCODE-FST:' FCODE-FST.
+000560   PERFORM UNTIL FCODE-FST NOT = '00'
+000561     READ FVCODE
 000562       END
 000563         CONTINUE
 000564       NOT END
 000566         MOVE SPACE         TO PVCODE-PRM
 000567         MOVE 'LOAD'        TO PVCODE-FUNC
-000568         MOVE F1RECORD      TO PVCODE
+000568         MOVE FVCODE-REC    TO PVCODE
 000569         CALL 'SUBVCODE' USING PVCODE-PRM
 000570                               IN100
 000571                               IN200
@@ -70,7 +82,7 @@
 000573                               OUT00
 000574     END-READ
 000575   END-PERFORM.
-000576   CLOSE F1INPUT.
+000576   CLOSE FVCODE.
 000577   MOVE SPACE         TO PVCODE-PRM.
 000578   MOVE 'EXEC'        TO PVCODE-FUNC.
 000579   CALL 'SUBVCODE' USING PVCODE-PRM

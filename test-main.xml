@@ -40,4 +40,12 @@
 		</exec>
 	</target>
 
+	<target name="exec">
+		<!-- 実行ファイルの指定はフルパスで。 -->
+		<exec executable="${basedir}/bin/TEST-MAIN.exe" dir="./">
+			<!-- DD_ＤＤ名の「ＤＤ名」部分がＣＯＢＯＬソースの方に記述されていて、それとこの環境変数が対応する。 -->
+			<env key="DD_FVCODE" value="./data/pchecktbl.txt" />
+		</exec>
+	</target>
+
 </project>
