@@ -2,12 +2,7 @@
 <project name="Calico" default="" basedir=".">
 	<property name="Calico" value="true" />
 	<property name="cobc_path" value="d:/cygwin64/usr/local/bin/cobc.exe" />
-
 	<target name="init">
-		<exec executable="${cobc_path}" dir=".">
-			<arg value="-version" />
-		</exec>
-
 	</target>
 
 	<target name="clean_build">
@@ -21,24 +16,24 @@
 		<pathconvert targetos="unix" property="p_sub_files" refid="sub_files"
 			pathsep="' '" />
 		<fileset id="main_file" dir="./src">
-			<include name="**/T00MYMEM.cob" />
+			<include name="**/SNIP.cob" />
 		</fileset>
 		<pathconvert targetos="unix" property="p_main_file" refid="main_file" />
 
 		<exec executable="${cobc_path}" dir=".">
-			<arg line="-I ./src/cpy" />
 			<arg value="-std=cobol85" />
 			<arg value="-Wall" />
+			<arg line="-I ./cpy" />
 			<arg value="-x" />
 			<arg value="-o" />
-			<arg value="./bin/T00MYMEM.exe" />
+			<arg value="./bin/SNIP.exe" />
 			<arg value="${p_main_file}" />
 			<arg line="'${p_sub_files}'" />
 		</exec>
 	</target>
-    <target name="exec" depends="create_exe">
-        <exec executable="./bin/T00MYMEM.exe" dir=".">
-        </exec>
-    </target>
-	
+
+	<target name="exec" depends="create_exe">
+		<exec executable="./bin/SNIP.exe" dir=".">
+		</exec>
+	</target>
 </project>

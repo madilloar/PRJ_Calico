@@ -85,7 +85,7 @@
 000000   MOVE SPACE               TO PMEM-PRM.
 000000   MOVE 'INIT'              TO PMEM-FNC.
 000000   MOVE 100                 TO PMEM-MEMARA-SZE.
-000000   CALL 'SUBMYMEM'       USING PMEM-PRM
+000000   CALL 'SUBMEM'       USING PMEM-PRM
 000000                               PMEM-VAL
 000000                               PMEM-MEMARA.
 000000   MOVE ZERO                TO PBKT-PRM.
@@ -152,7 +152,7 @@
 000000   MOVE 'SETL'              TO PMEM-FNC.
 000000   MOVE ZERO                TO PMEM-VAL(1:PBKT-SZE).
 000000   MOVE PBKT-SZE            TO PMEM-VLL.
-000000   CALL 'SUBMYMEM'       USING PMEM-PRM
+000000   CALL 'SUBMEM'       USING PMEM-PRM
 000000                               PMEM-VAL
 000000                               PMEM-MEMARA.
 000000   DISPLAY 'PRM:(' PMEM-PRM ')'.
